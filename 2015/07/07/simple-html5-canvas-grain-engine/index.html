@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>简单的HTML5 Canvas粒子引擎 | Jation&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言好吧，说是“粒子引擎”还是大言不惭而标题党了，离真正的粒子引擎还有点远。废话少说，先看DEMO
+本文将教会你做一个简单的canvas粒子制造器。
+世界观这个简单的引擎里需要有三种元素：世界(World)、发射器(Launcher)、粒子(Grain)。总得来说就是：发射器存在于世界之中，发射器制造粒子，世界和发射器都会影响粒子的状态，每个粒子在经过世界和发射器的影响之后，计算出下一刻的位置，把">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单的HTML5 Canvas粒子引擎">
+<meta property="og:url" content="http://jation.github.io/2015/07/07/simple-html5-canvas-grain-engine/index.html">
+<meta property="og:site_name" content="Jation's Blog">
+<meta property="og:description" content="前言好吧，说是“粒子引擎”还是大言不惭而标题党了，离真正的粒子引擎还有点远。废话少说，先看DEMO
+本文将教会你做一个简单的canvas粒子制造器。
+世界观这个简单的引擎里需要有三种元素：世界(World)、发射器(Launcher)、粒子(Grain)。总得来说就是：发射器存在于世界之中，发射器制造粒子，世界和发射器都会影响粒子的状态，每个粒子在经过世界和发射器的影响之后，计算出下一刻的位置，把">
+<meta property="og:image" content="http://7xkfnj.com1.z0.glb.clouddn.com/blog/posts/2015/07/07/flowchart.png">
+<meta property="og:image" content="http://7xkfnj.com1.z0.glb.clouddn.com/blog/public/img/wechat_pay_qrcode.jpg">
+<meta property="og:updated_time" content="2015-07-17T15:08:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简单的HTML5 Canvas粒子引擎">
+<meta name="twitter:description" content="前言好吧，说是“粒子引擎”还是大言不惭而标题党了，离真正的粒子引擎还有点远。废话少说，先看DEMO
+本文将教会你做一个简单的canvas粒子制造器。
+世界观这个简单的引擎里需要有三种元素：世界(World)、发射器(Launcher)、粒子(Grain)。总得来说就是：发射器存在于世界之中，发射器制造粒子，世界和发射器都会影响粒子的状态，每个粒子在经过世界和发射器的影响之后，计算出下一刻的位置，把">
+  
+    <link rel="alternative" href="/atom.xml" title="Jation&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Jation&#39;s Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Happy coding.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://jation.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-simple-html5-canvas-grain-engine" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/07/07/simple-html5-canvas-grain-engine/" class="article-date">
+  <time datetime="2015-07-07T07:31:00.000Z" itemprop="datePublished">2015-07-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      简单的HTML5 Canvas粒子引擎
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言">前言</h2><p>好吧，说是“粒子引擎”还是大言不惭而标题党了，离真正的粒子引擎还有点远。废话少说，先看<a href="http://ol.weixin.qq.com/public/users/jationhuang/canvasworld/main.html" target="_blank" rel="external">DEMO</a></p>
+<p>本文将教会你做一个简单的canvas粒子<strong>制造器</strong>。</p>
+<h2 id="世界观">世界观</h2><p>这个简单的引擎里需要有三种元素：世界(World)、发射器(Launcher)、粒子(Grain)。总得来说就是：发射器存在于世界之中，发射器制造粒子，世界和发射器都会影响粒子的状态，每个粒子在经过世界和发射器的影响之后，计算出下一刻的位置，把自己画出来。</p>
+<h3 id="世界(World)">世界(World)</h3><p>所谓“世界”，就是全局影响那些存在于这这个“世界”的粒子的<strong>环境</strong>。一个粒子如果选择存在于这个“世界”里，那么这个粒子将会受到这个“世界”的影响。</p>
+<h3 id="发射器(Launcher)">发射器(Launcher)</h3><p>用来发射粒子的单位。他们能控制粒子生成的粒子的各种属性。作为粒子们的爹妈，发射器能够控制粒子的出生属性：出生的位置、出生的大小、寿命、是否受到“World”的影响、是否受到”Launcher”本身的影响等等……</p>
+<p>除此之外，发射器本身还要把自己生出来的已经死去的粒子清扫掉。</p>
+<h3 id="粒子(Grain)">粒子(Grain)</h3><p>最小基本单位，就是每一个骚动的<strong>个体</strong>。每一个个体都拥有自己的位置、大小、寿命、是否受到同名度的影响等属性，这样才能在canvas上每时每刻准确描绘出他们的形态。</p>
+<h2 id="粒子绘制主逻辑">粒子绘制主逻辑</h2><p><img src="http://7xkfnj.com1.z0.glb.clouddn.com/blog/posts/2015/07/07/flowchart.png" alt=""></p>
+<p>上面就是粒子绘制的主要逻辑。</p>
+<p>我们先来看看世界需要什么。</p>
+<h3 id="创造一个世界">创造一个世界</h3><p>不知道为什么我理所当然得会想到世界应该有<strong>重力加速度</strong>。但是光有重力加速度不能表现出很多花样，于是这里我给他增加了另外两种影响因素：<strong>热气</strong>和<strong>风</strong>。重力加速度和热气他们的方向是垂直的，风影响方向是水平的，有了这三个东西，我们就能让粒子动得很风骚了。</p>
+<p>一些状态（比如粒子的存亡）的维护需要有时间标志，那么我们把时间也加入到世界里吧，这样方便后期做时间暂停、逆流的效果。</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">define(function(require, exports, module) &#123;</span><br><span class="line">    var Util = require('./Util');</span><br><span class="line">    var Launcher = require('./Launcher');</span><br><span class="line"></span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span> 世界构造函数</span><br><span class="line">     <span class="keyword">*</span> <span class="comment">@param config</span></span><br><span class="line">     <span class="keyword">*</span>          backgroundImage     背景图片</span><br><span class="line">     <span class="keyword">*</span>          canvas              canvas引用</span><br><span class="line">     <span class="keyword">*</span>          context             canvas的context</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          time                世界时间</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          gravity             重力加速度</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          heat                热力</span><br><span class="line">     <span class="keyword">*</span>          heatEnable          热力开关</span><br><span class="line">     <span class="keyword">*</span>          minHeat             随机最小热力</span><br><span class="line">     <span class="keyword">*</span>          maxHeat             随机最大热力</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          wind                风力</span><br><span class="line">     <span class="keyword">*</span>          windEnable          风力开关</span><br><span class="line">     <span class="keyword">*</span>          minWind             随机最小风力</span><br><span class="line">     <span class="keyword">*</span>          maxWind             随机最大风力</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          timeProgress        时间进步单位，用于控制时间速度</span><br><span class="line">     <span class="keyword">*</span>          launchers           属于这个世界的发射器队列</span><br><span class="line">     <span class="keyword">*</span> <span class="comment">@constructor</span></span><br><span class="line">     <span class="keyword">*</span>/</span><br><span class="line">    function World(config)&#123;</span><br><span class="line">        //太长了，略去细节</span><br><span class="line">    &#125;</span><br><span class="line">    World.prototype.updateStatus = function()&#123;&#125;;</span><br><span class="line">    World.prototype.timeTick = function()&#123;&#125;;</span><br><span class="line">    World.prototype.createLauncher = function(config)&#123;&#125;;</span><br><span class="line">    World.prototype.drawBackground = function()&#123;&#125;;</span><br><span class="line">    module.exports = World;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>大家都知道，画动画就是不断得重画，所以我们需要暴露出一个方法，提供给外部循环调用:</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 循环触发函数</span><br><span class="line"> * 在满足条件的时候触发</span><br><span class="line"> * 比如RequestAnimationFrame回调，或者setTimeout回调之后循环触发的</span><br><span class="line"> * 用于维持World的生命</span><br><span class="line"> */</span></span><br><span class="line"> </span><br><span class="line">World.prototype.timeTick = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//更新世界各种状态</span></span><br><span class="line">    <span class="keyword">this</span>.updateStatus();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.context.clearRect(<span class="number">0</span>,<span class="number">0</span>,<span class="keyword">this</span>.canvas.width,<span class="keyword">this</span>.canvas.height);</span><br><span class="line">    <span class="keyword">this</span>.drawBackground();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//触发所有发射器的循环调用函数</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;<span class="keyword">this</span>.launchers.length;i++)&#123;</span><br><span class="line">        <span class="keyword">this</span>.launchers[i].updateLauncherStatus();</span><br><span class="line">        <span class="keyword">this</span>.launchers[i].createGrain(<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">this</span>.launchers[i].paintGrain();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这个timeTick方法在外部循环调用时，每次都做着这几件事：</p>
+<ol>
+<li>更新世界状态</li>
+<li>清空画布重新绘制背景</li>
+<li>轮询全世界所有发射器，并更新它们的状态，创建新的粒子，绘制粒子</li>
+</ol>
+<p>那么，世界的状态到底有哪些要更新？</p>
+<p>显然，每一次都要让时间往前增加一点是容易想到的。其次，为了让粒子尽可能动得风骚，我们让风和热力的状态都保持不稳定——每一阵风和每一阵热浪，都是你意识不到的~</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">World.prototype.updateStatus = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.time+=<span class="keyword">this</span>.timeProgress;</span><br><span class="line">    <span class="keyword">this</span>.wind = Util.randomFloat(<span class="keyword">this</span>.minWind,<span class="keyword">this</span>.maxWind);</span><br><span class="line">    <span class="keyword">this</span>.heat = Util.randomFloat(<span class="keyword">this</span>.minHeat,<span class="keyword">this</span>.maxHeat);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>世界造出来了，我们还得让世界能造粒子发射器呀，要不然怎么造粒子呢~</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">World.prototype.createLauncher = <span class="function"><span class="keyword">function</span><span class="params">(config)</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> _launcher = <span class="keyword">new</span> Launcher(config);</span><br><span class="line">    <span class="keyword">this</span>.launchers.push(_launcher);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>好了，做为上帝，我们已经把世界打造得差不多了，接下来就是捏造各种各样的生灵了。</p>
+<h3 id="捏出第一个生物：发射器">捏出第一个生物：发射器</h3><p>发射器是世界上的第一种生物，依靠发射器才能繁衍出千奇百怪的粒子。那么发射器需要具备什么特征呢？</p>
+<p>首先，它是属于哪个世界的得搞清楚（因为这个世界可能不止一个世界）。</p>
+<p>其次，就是发射器本身的状态：位置、自身体系内的风力、热力，可以说：发射器就是一个世界里的小世界。</p>
+<p>最后就是描述一下他的“基因”了，发射器的基因会影响到他们的后代（粒子）。我们赋予发射器越多的“基因”，那么他们的后代就会有更多的生物特征。具体看下面的良心注释代码吧~</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">define(function (require, exports, module) &#123;</span><br><span class="line">    var Util = require('./Util');</span><br><span class="line">    var Grain = require('./Grain');</span><br><span class="line"></span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span> 发射器构造函数</span><br><span class="line">     <span class="keyword">*</span> <span class="comment">@param config</span></span><br><span class="line">     <span class="keyword">*</span>          id              身份标识用于后续可视化编辑器的维护</span><br><span class="line">     <span class="keyword">*</span>          world           这个launcher的宿主</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          grainImage      粒子图片</span><br><span class="line">     <span class="keyword">*</span>          grainList       粒子队列</span><br><span class="line">     <span class="keyword">*</span>          grainLife       产生的粒子的生命</span><br><span class="line">     <span class="keyword">*</span>          grainLifeRange  粒子生命波动范围</span><br><span class="line">     <span class="keyword">*</span>          maxAliveCount   最大存活粒子数量</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          x               发射器位置x</span><br><span class="line">     <span class="keyword">*</span>          y               发射器位置y</span><br><span class="line">     <span class="keyword">*</span>          rangeX          发射器位置x波动范围</span><br><span class="line">     <span class="keyword">*</span>          rangeY          发射器位置y波动范围</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          sizeX           粒子横向大小</span><br><span class="line">     <span class="keyword">*</span>          sizeY           粒子纵向大小</span><br><span class="line">     <span class="keyword">*</span>          sizeRange       粒子大小波动范围</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          mass            粒子质量（暂时没什么用）</span><br><span class="line">     <span class="keyword">*</span>          massRange       粒子质量波动范围</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          heat            发射器自身体系的热气</span><br><span class="line">     <span class="keyword">*</span>          heatEnable      发射器自身体系的热气生效开关</span><br><span class="line">     <span class="keyword">*</span>          minHeat         随机热气最小值</span><br><span class="line">     <span class="keyword">*</span>          maxHeat         随机热气最小值</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          wind            发射器自身体系的风力</span><br><span class="line">     <span class="keyword">*</span>          windEnable      发射器自身体系的风力生效开关</span><br><span class="line">     <span class="keyword">*</span>          minWind         随机风力最小值</span><br><span class="line">     <span class="keyword">*</span>          maxWind         随机风力最小值</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          grainInfluencedByWorldWind      粒子受到世界风力影响开关</span><br><span class="line">     <span class="keyword">*</span>          grainInfluencedByWorldHeat      粒子受到世界热气影响开关</span><br><span class="line">     <span class="keyword">*</span>          grainInfluencedByWorldGravity   粒子受到世界重力影响开关</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          grainInfluencedByLauncherWind   粒子受到发射器风力影响开关</span><br><span class="line">     <span class="keyword">*</span>          grainInfluencedByLauncherHeat   粒子受到发射器热气影响开关</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span> <span class="comment">@constructor</span></span><br><span class="line">     <span class="keyword">*</span>/</span><br><span class="line"></span><br><span class="line">    function Launcher(config) &#123;</span><br><span class="line">        //太长了，略去细节</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Launcher.prototype.updateLauncherStatus = function () &#123;&#125;;</span><br><span class="line">    Launcher.prototype.swipeDeadGrain = function (grain_id) &#123;&#125;;</span><br><span class="line">    Launcher.prototype.createGrain = function (count) &#123;&#125;;</span><br><span class="line">    Launcher.prototype.paintGrain = function () &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    module.exports = Launcher;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>发射器要负责生孩子啊，怎么生呢：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Launcher.prototype.createGrain = function (<span class="keyword">count</span>) &#123;</span><br><span class="line">       <span class="keyword">if</span> (<span class="keyword">count</span> + <span class="keyword">this</span>.grainList.length &lt;= <span class="keyword">this</span>.maxAliveCount) &#123;</span><br><span class="line">           <span class="comment">//新建了count个加上旧的还没达到最大数额限制</span></span><br><span class="line">       &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.grainList.length &gt;= <span class="keyword">this</span>.maxAliveCount &amp;&amp;</span><br><span class="line">           <span class="keyword">count</span> + <span class="keyword">this</span>.grainList.length &gt; <span class="keyword">this</span>.maxAliveCount) &#123;</span><br><span class="line">           <span class="comment">//光是旧的粒子数量还没能达到最大限制</span></span><br><span class="line">           <span class="comment">//新建了count个加上旧的超过了最大数额限制</span></span><br><span class="line">           <span class="keyword">count</span> = <span class="keyword">this</span>.maxAliveCount - <span class="keyword">this</span>.grainList.length;</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">count</span> = <span class="number">0</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">for</span> (var i = <span class="number">0</span>; i &lt; <span class="keyword">count</span>; i++) &#123;</span><br><span class="line">           var _rd = Util.randomFloat(<span class="number">0</span>, Math.PI * <span class="number">2</span>);</span><br><span class="line">           var _grain = <span class="keyword">new</span> Grain(&#123;<span class="comment">/*粒子配置*/</span>&#125;);</span><br><span class="line">           <span class="keyword">this</span>.grainList.<span class="keyword">push</span>(_grain);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;;</span><br></pre></td></tr></table></figure>
+<p>生完孩子，孩子死掉了还得打扫……（好悲伤，怪内存不够用咯）</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Launcher.prototype.swipeDeadGrain = <span class="function"><span class="keyword">function</span> <span class="params">(grain_id)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.grainList.length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (grain_id == <span class="keyword">this</span>.grainList[i].id) &#123;</span><br><span class="line">            <span class="keyword">this</span>.grainList = <span class="keyword">this</span>.grainList.remove(i);<span class="comment">//remove是自己定义的一个Array方法</span></span><br><span class="line">            <span class="keyword">this</span>.createGrain(<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>生完孩子，还得把孩子放出来玩：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Launcher.prototype.paintGrain = <span class="function"><span class="keyword">function</span> <span class="params">()</span> &#123;</span></span><br><span class="line">    <span class="keyword">for</span> (var <span class="built_in">i</span> = <span class="number">0</span>; <span class="built_in">i</span> &lt; this.grainList.<span class="built_in">length</span>; <span class="built_in">i</span>++) <span class="cell">&#123;</span><br><span class="line">        this.grainList[i].paint();</span><br><span class="line">    &#125;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>自己的内部小世界也不要忘了维护呀~(跟外面的大世界差不多)</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Launcher.prototype.updateLauncherStatus = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.grainInfluencedByLauncherWind) &#123;</span><br><span class="line">        <span class="keyword">this</span>.wind = Util.randomFloat(<span class="keyword">this</span>.minWind, <span class="keyword">this</span>.maxWind);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.grainInfluencedByLauncherHeat)&#123;</span><br><span class="line">        <span class="keyword">this</span>.heat = Util.randomFloat(<span class="keyword">this</span>.minHeat, <span class="keyword">this</span>.maxHeat);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>好了，至此，我们完成了世界上第一种生物的打造，接下来就是他们的后代了（呼呼，上帝好累）</p>
+<h3 id="子子孙孙，无穷尽也">子子孙孙，无穷尽也</h3><p>出来吧，小的们，你们才是世界的主角！</p>
+<p>作为世界的主角，粒子们拥有各种自身的状态：位置、速度、大小、寿命长度、出生时间当然必不可少</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">define(function (require, exports, module) &#123;</span><br><span class="line">    var Util = require('./Util');</span><br><span class="line"></span><br><span class="line">    /<span class="keyword">*</span><span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span> 粒子构造函数</span><br><span class="line">     <span class="keyword">*</span> <span class="comment">@param config</span></span><br><span class="line">     <span class="keyword">*</span>          id              唯一标识</span><br><span class="line">     <span class="keyword">*</span>          world           世界宿主</span><br><span class="line">     <span class="keyword">*</span>          launcher        发射器宿主</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          x               位置x</span><br><span class="line">     <span class="keyword">*</span>          y               位置y</span><br><span class="line">     <span class="keyword">*</span>          vx              水平速度</span><br><span class="line">     <span class="keyword">*</span>          vy              垂直速度</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          sizeX           横向大小</span><br><span class="line">     <span class="keyword">*</span>          sizeY           纵向大小</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          mass            质量</span><br><span class="line">     <span class="keyword">*</span>          life            生命长度</span><br><span class="line">     <span class="keyword">*</span>          birthTime       出生时间</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          color_r</span><br><span class="line">     <span class="keyword">*</span>          color_g</span><br><span class="line">     <span class="keyword">*</span>          color_b</span><br><span class="line">     <span class="keyword">*</span>          alpha           透明度</span><br><span class="line">     <span class="keyword">*</span>          initAlpha       初始化时的透明度</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span>          influencedByWorldWind</span><br><span class="line">     <span class="keyword">*</span>          influencedByWorldHeat</span><br><span class="line">     <span class="keyword">*</span>          influencedByWorldGravity</span><br><span class="line">     <span class="keyword">*</span>          influencedByLauncherWind</span><br><span class="line">     <span class="keyword">*</span>          influencedByLauncherHeat</span><br><span class="line">     <span class="keyword">*</span></span><br><span class="line">     <span class="keyword">*</span> <span class="comment">@constructor</span></span><br><span class="line">     <span class="keyword">*</span>/</span><br><span class="line">    function Grain(config) &#123;</span><br><span class="line">        //太长了，略去细节</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Grain.prototype.isDead = function () &#123;&#125;;</span><br><span class="line">    Grain.prototype.calculate = function () &#123;&#125;;</span><br><span class="line">    Grain.prototype.paint = function () &#123;&#125;;</span><br><span class="line">    module.exports = Grain;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>粒子们需要知道自己的下一刻是怎样子的，这样才能把自己在世界展现出来。对于运动状态，当然都是初中物理的知识了:-)</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Grain.prototype.calculate = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//计算位置</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.influencedByWorldGravity) &#123;</span><br><span class="line">        <span class="keyword">this</span>.vy += <span class="keyword">this</span>.world.gravity+Util.randomFloat(<span class="number">0</span>,<span class="number">0.3</span>*<span class="keyword">this</span>.world.gravity);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.influencedByWorldHeat &amp;&amp; <span class="keyword">this</span>.world.heatEnable) &#123;</span><br><span class="line">        <span class="keyword">this</span>.vy -= <span class="keyword">this</span>.world.heat+Util.randomFloat(<span class="number">0</span>,<span class="number">0.3</span>*<span class="keyword">this</span>.world.heat);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.influencedByLauncherHeat &amp;&amp; <span class="keyword">this</span>.launcher.heatEnable) &#123;</span><br><span class="line">        <span class="keyword">this</span>.vy -= <span class="keyword">this</span>.launcher.heat+Util.randomFloat(<span class="number">0</span>,<span class="number">0.3</span>*<span class="keyword">this</span>.launcher.heat);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.influencedByWorldWind &amp;&amp; <span class="keyword">this</span>.world.windEnable) &#123;</span><br><span class="line">        <span class="keyword">this</span>.vx += <span class="keyword">this</span>.world.wind+Util.randomFloat(<span class="number">0</span>,<span class="number">0.3</span>*<span class="keyword">this</span>.world.wind);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.influencedByLauncherWind &amp;&amp; <span class="keyword">this</span>.launcher.windEnable) &#123;</span><br><span class="line">        <span class="keyword">this</span>.vx += <span class="keyword">this</span>.launcher.wind+Util.randomFloat(<span class="number">0</span>,<span class="number">0.3</span>*<span class="keyword">this</span>.launcher.wind);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.y += <span class="keyword">this</span>.vy;</span><br><span class="line">    <span class="keyword">this</span>.x += <span class="keyword">this</span>.vx;</span><br><span class="line">    <span class="keyword">this</span>.alpha = <span class="keyword">this</span>.initAlpha * (<span class="number">1</span> - (<span class="keyword">this</span>.world.time - <span class="keyword">this</span>.birthTime) / <span class="keyword">this</span>.life);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//<span class="doctag">TODO</span> 计算颜色 和 其他</span></span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>粒子们怎么知道自己死了没？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Grain.prototype.isDead = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.abs(<span class="keyword">this</span>.world.time - <span class="keyword">this</span>.birthTime)&gt;<span class="keyword">this</span>.life;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>粒子们又该以怎样的姿态把自己展现出来？</p>
+<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Grain.prototype.paint = <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.isDead()) &#123;</span><br><span class="line">        <span class="keyword">this</span>.launcher.swipeDeadGrain(<span class="keyword">this</span>.id);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.calculate();</span><br><span class="line">        <span class="keyword">this</span>.world.context.save();</span><br><span class="line">        <span class="keyword">this</span>.world.context.globalCompositeOperation = <span class="string">'lighter'</span>;</span><br><span class="line">        <span class="keyword">this</span>.world.context.globalAlpha = <span class="keyword">this</span>.alpha;</span><br><span class="line">        <span class="keyword">this</span>.world.context.drawImage(<span class="keyword">this</span>.launcher.grainImage, <span class="keyword">this</span>.x-(<span class="keyword">this</span>.sizeX)/<span class="number">2</span>, <span class="keyword">this</span>.y-(<span class="keyword">this</span>.sizeY)/<span class="number">2</span>, <span class="keyword">this</span>.sizeX, <span class="keyword">this</span>.sizeY);</span><br><span class="line">        <span class="keyword">this</span>.world.context.restore();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>嗟乎。</p>
+<h2 id="后续">后续</h2><p>后续希望能够通过这个雏形，进行扩展，再造一个可视化编辑器供大家使用。</p>
+<p>如果你觉得文章是良心出品，微信扫一下我的头像给点鼓励呗~</p>
+<p><img src="http://7xkfnj.com1.z0.glb.clouddn.com/blog/public/img/wechat_pay_qrcode.jpg" alt=""></p>
+<p>对了，代码都在这里哦：<a href="https://github.com/jation/CanvasGrain" target="_blank" rel="external">https://github.com/jation/CanvasGrain</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://jation.github.io/2015/07/07/simple-html5-canvas-grain-engine/" data-id="cic7rh4ba0000hohoo8ybc5tp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/canvas/">canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/canvas/">canvas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/canvas/" style="font-size: 10px;">canvas</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/07/07/simple-html5-canvas-grain-engine/">简单的HTML5 Canvas粒子引擎</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 Jation Huang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
